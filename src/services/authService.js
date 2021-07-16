@@ -2,7 +2,7 @@ import config from "../config.json";
 import http from "./httpService";
 import jwtDecode from "jwt-decode";
 
-const authEndpoint = config.apiEndpoint+"/api/auth";
+const authEndpoint = "/auth";
 
 http.setJwt(getJwt())
 

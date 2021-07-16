@@ -1,7 +1,7 @@
 import config from "../config.json";
 import http from "./httpService";
 
-const moviesEndpoint = config.apiEndpoint+"/api/movies"
+const moviesEndpoint = "/movies"
 
 export async function getMovies(){
    const {data: movies} = await http.get(moviesEndpoint)

@@ -1,8 +1,5 @@
 import httpService from "../services/httpService";
-import config from "../config.json";
-import * as fakeGenreService from "../services/fakeGenreService";
-
-const moviesEndpoint = config.apiEndpoint+"/api/movies"
+const moviesEndpoint = "/movies"
 
 
 export async function getMovies() {
