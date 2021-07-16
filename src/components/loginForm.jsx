@@ -1,0 +1,59 @@
+import React from "react";
+import Joi from 'joi-browser';
+import Form from "./common/form";
+import {getCurrentUser, login} from "../services/authService"
+import {Redirect} from "react-router-dom";
+
+export default class LoginForm extends Form {
+   state = {
+      data: {username: 'louis.charles@gadz.org', password: 'password'},
+      errors:{}
+   }
+
+   schema = {
+      username: Joi.string().required().label("Username"),
+      password: Joi.string().required().label("Password")
+   }
+
+   doSubmit = async () => {
+      try {
+         const { data } = this.state;
+         await login(data.username,data.password);
+
+         const {state} = this.props.location;
+         window.location = state
+            ? state.from.pathname
+            : "/";
+      } catch(ex) {
+         if(ex.response && ex.response.status === 400){
+            const errors = {...this.state.errors};
+            errors.username = ex.response.data;
+
+            this.setState({errors});
+         }
+      }
+   }
+
+   validateProperty = ({name, value}) => {
+      const obj = {[name]: value};
+      const schema = {[name]: this.schema[name]};
+
+      const {error} = Joi.validate(obj, schema);
+
+      return error ? error.details[0].message : null;
+   }
+
+
+   render() {
+      if(getCurrentUser()) return <Redirect to={"/"}/>
+
+      return (<div className="container">
+         <form onSubmit={this.handleSubmit}>
+            {this.renderInput('username','Username')}
+            {this.renderInput('password','Password','password')}
+
+            {this.renderButton("Login")}
+         </form>
+      </div>)
+   }
+}
